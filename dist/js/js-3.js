@@ -7,7 +7,7 @@ function sortDataByName(data, headers, opt_mass, opt_bool_mass) {
 
       if((outpInd >= 0) && (outpInd < 5)) {
         let navOpt = headers[outpInd];
-        console.log('navOpt = ' + navOpt);
+        //console.log('navOpt = ' + navOpt);
 
         let nameA = a[navOpt].toLowerCase();
         let nameB = b[navOpt].toLowerCase();
@@ -65,8 +65,18 @@ function createTable(data) {
   return table;
 }
 
+// --------------------
+
+/*
+  Выводить оригинальную таблицу, когда не заданы уровни сортировки
+  Сделать обновление таблицы не по изменению параметров, а по нажатию кнопки "Построить"
+  Добавить API для галочек
+
+  И останется сделать фильтрацию записей
+*/
+
 // Получаем ссылку на таблицу
-const table = document.getElementById("my-table");
+let table = document.getElementById("my-table");
 
 if(table == undefined) { 
   alert('Ошибка! На странице не обнаружена требуемая таблица!');
@@ -94,12 +104,12 @@ for (let i = 1; i < table.rows.length; i++) {
   data.push(rowData);
 }
 
-console.log(data);
+//console.log(data);
 
 let opt_mass = [];
 
-opt_mass[0] = 3;
-opt_mass[1] = 4;
+opt_mass[0] = 0;
+opt_mass[1] = 0;
 opt_mass[2] = 0;
 
 let opt_bool_mass = [];
@@ -108,15 +118,66 @@ opt_bool_mass[0] = false;
 opt_bool_mass[1] = false;
 opt_bool_mass[2] = false;
 
-sortDataByName(data, headers, opt_mass, opt_bool_mass);
+// Пересобираем таблицу
+function ReqSort() {
+  sortDataByName(data, headers, opt_mass, opt_bool_mass);
 
-console.log(data);
-
-if (table) {
+  //console.log(data);
+  
   table.remove();
+  
+  var newTable = createTable(data);
+  
+  var container = document.getElementById("table-container");
+  container.insertBefore(newTable, container.firstChild);
+
+  table = document.getElementById("my-table");
 }
 
-var newTable = createTable(data);
 
-var container = document.getElementById("table-container");
-container.insertBefore(newTable, container.firstChild);
+// Для получения значения выбранного переключателя:
+
+/*
+const radioButtons = document.querySelector('.block-03 .center-edge-2 select');
+console.log(radioButtons[0].value);
+*/
+
+const selectElement1 = document.querySelector('.block-03 .l1 select');
+
+selectElement1.addEventListener('change', function() {
+  let selectedValue = selectElement1.value;  
+  console.log('opt_mass[0] = ' + selectedValue);
+  opt_mass[0] = selectedValue;
+  ReqSort();
+});
+
+const selectElement2 = document.querySelector('.block-03 .l2 select');
+
+selectElement2.addEventListener('change', function() {
+  let selectedValue = selectElement2.value;  
+  console.log('opt_mass[1] = ' + selectedValue);
+  opt_mass[1] = selectedValue;
+  ReqSort();
+});
+
+const selectElement3 = document.querySelector('.block-03 .l3 select');
+
+selectElement3.addEventListener('change', function() {
+  let selectedValue = selectElement3.value;  
+  console.log('opt_mass[2] = ' + selectedValue);
+  opt_mass[2] = selectedValue;
+  ReqSort();
+});
+
+//Для получения значений выбранных флажков:
+
+const checkboxes = document.querySelectorAll('.block-03 .right-edge-2 input[type="checkbox"]');
+const checkedValues = [];
+
+checkboxes.forEach(checkbox => {
+  if (checkbox.checked) {
+    checkedValues.push(checkbox.value);
+  }
+});
+
+console.log(checkedValues);
