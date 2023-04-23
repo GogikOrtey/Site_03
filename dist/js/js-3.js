@@ -77,6 +77,7 @@ function createTable(data) {
 
 // Получаем ссылку на таблицу
 let table = document.getElementById("my-table");
+let butt_sort = document.getElementById("butt-sort");
 
 if(table == undefined) { 
   alert('Ошибка! На странице не обнаружена требуемая таблица!');
@@ -134,6 +135,11 @@ function ReqSort() {
   table = document.getElementById("my-table");
 }
 
+butt_sort.addEventListener('click', () => {
+  console.log('Кнопка нажата!');
+  ReqSort();
+});
+
 
 // Для получения значения выбранного переключателя:
 
@@ -148,7 +154,6 @@ selectElement1.addEventListener('change', function() {
   let selectedValue = selectElement1.value;  
   console.log('opt_mass[0] = ' + selectedValue);
   opt_mass[0] = selectedValue;
-  ReqSort();
 });
 
 const selectElement2 = document.querySelector('.block-03 .l2 select');
@@ -157,7 +162,6 @@ selectElement2.addEventListener('change', function() {
   let selectedValue = selectElement2.value;  
   console.log('opt_mass[1] = ' + selectedValue);
   opt_mass[1] = selectedValue;
-  ReqSort();
 });
 
 const selectElement3 = document.querySelector('.block-03 .l3 select');
@@ -166,7 +170,6 @@ selectElement3.addEventListener('change', function() {
   let selectedValue = selectElement3.value;  
   console.log('opt_mass[2] = ' + selectedValue);
   opt_mass[2] = selectedValue;
-  ReqSort();
 });
 
 //Для получения значений выбранных флажков:

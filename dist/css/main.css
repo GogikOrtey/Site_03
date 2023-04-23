@@ -182,10 +182,11 @@ p.title-1 {
   border: solid #000 2px;
   border-radius: 5px;
   background-color: #00a3ff;
-}
-.table > button:hover {
-  background-color: #ffd600;
-  border: dashed #000 2px;
+/*
+		&:hover
+			background-color: bg-yel
+			border: dashed black 2px
+			*/
 }
 .table-2 {
   display: grid;
@@ -207,9 +208,37 @@ p.title-1 {
   border: solid #000 2px;
   border-radius: 5px;
   background-color: #00a3ff;
+/*
+		&:hover
+			background-color: bg-yel
+			border: dashed black 2px
+			*/
 }
-.table-2 > button:hover {
+.main-block #butt-sort,
+.main-block #butt-filter,
+.main-block #butt-graf {
+  font-style: italic;
+}
+.main-block #butt-sort::-moz-selection, .main-block #butt-filter::-moz-selection, .main-block #butt-graf::-moz-selection {
   background-color: #ffd600;
+  border: dashed #000 2px;
+}
+.main-block #butt-sort:hover,
+.main-block #butt-filter:hover,
+.main-block #butt-graf:hover,
+.main-block #butt-sort:active,
+.main-block #butt-filter:active,
+.main-block #butt-graf:active,
+.main-block #butt-sort::selection,
+.main-block #butt-filter::selection,
+.main-block #butt-graf::selection {
+  background-color: #ffd600;
+  border: dashed #000 2px;
+}
+.main-block #butt-sort:active,
+.main-block #butt-filter:active,
+.main-block #butt-graf:active {
+  font-weight: bold;
   border: dashed #000 2px;
 }
 .table > p,
@@ -292,6 +321,16 @@ p.title-1 {
   .main-block {
     height: auto;
   }
+}
+.text-002 {
+  font-size: x-large;
+  border: 2px #000 solid;
+  background-color: #ffd600;
+  border-radius: 10px;
+  margin: 10px;
+  padding: 10px;
+  padding-left: 20px;
+  text-align: center;
 }
 p.text-001 {
   text-align: center;

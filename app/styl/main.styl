@@ -227,9 +227,11 @@ p.title-1
 		border: solid black 2px
 		border-radius: 5px
 		background-color: bg-blue
+		/*
 		&:hover
 			background-color: bg-yel
 			border: dashed black 2px
+			*/
 
 .table-2
 	display: grid
@@ -249,9 +251,24 @@ p.title-1
 		border: solid black 2px
 		border-radius: 5px
 		background-color: bg-blue
+		/*
 		&:hover
 			background-color: bg-yel
 			border: dashed black 2px
+			*/
+
+
+.main-block
+	#butt-sort, #butt-filter, #butt-graf
+		font-style: italic
+		&:hover, &:active, &::selection
+			background-color: bg-yel
+			border: dashed black 2px
+		&:active
+			//color red
+			font-weight: bold			
+			border: dashed black 2px
+			
 
 .table > p, .table > input
 	display block
@@ -332,6 +349,18 @@ p.title-1
 @media (max-width 1200px)
 	.main-block
 		height: auto
+
+// Надпись "Блок настроек показа"
+
+.text-002
+	font-size: x-large
+	border 2px black solid
+	background-color: bg-yel
+	border-radius: 10px
+	margin 10px
+	padding 10px
+	padding-left 20px
+	text-align: center
 
 // Название таблицы
 
