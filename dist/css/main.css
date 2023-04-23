@@ -261,6 +261,43 @@ p.title-1 {
     height: 430px;
   }
 }
+.block-01 > .table {
+  width: 100%;
+  margin-left: 0px;
+}
+@media (max-width: 1200px) {
+  .block-01 > .table {
+    width: 94%;
+    margin: auto;
+  }
+}
+@media (min-width: 1200px) {
+  .block-01 {
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+}
+.block-02 {
+  margin-top: 20px;
+}
+@media (max-width: 1200px) {
+  .table.class_01 {
+    margin-bottom: 40px;
+  }
+}
+.main-block {
+  height: 600px;
+}
+@media (max-width: 1200px) {
+  .main-block {
+    height: auto;
+  }
+}
+p.text-001 {
+  text-align: center;
+  margin-top: 30px;
+  font-size: 35px;
+}
 table {
   width: 80%;
   margin: auto;
