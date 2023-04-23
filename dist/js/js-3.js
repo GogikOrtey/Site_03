@@ -44,7 +44,9 @@ function createTable(data) {
   for (var i = 0; i < headerNames.length; i++) {
     var headerCell = document.createElement("th");
     headerCell.textContent = headerNames[i];
-    headerRow.appendChild(headerCell);
+    //headerCell.className = 'title';
+    headerRow.appendChild(headerCell);    
+    headerRow.className = 'title';
   }
   table.appendChild(headerRow);
 
@@ -68,9 +70,7 @@ function createTable(data) {
 // --------------------
 
 /*
-  Выводить оригинальную таблицу, когда не заданы уровни сортировки
-  Сделать обновление таблицы не по изменению параметров, а по нажатию кнопки "Построить"
-  Добавить API для галочек
+  Убирать из функций те, что мы уже использовали
 
   И останется сделать фильтрацию записей
 */
@@ -136,10 +136,107 @@ function ReqSort() {
 }
 
 butt_sort.addEventListener('click', () => {
-  console.log('Кнопка нажата!');
+  //console.log('Кнопка нажата!');
+  check_checkboxes_1();
   ReqSort();
 });
 
+// Массив, в котором хранятся все строки значений списка
+let allElemMass = [];
+/*
+allElemMass[0] = '<option value="0">--- Нет ---</option>';
+allElemMass[1] = '<option value="1">Название</option>';
+allElemMass[2] = '<option value="2">Год выхода</option>';
+allElemMass[3] = '<option value="3">Рейтинг в кинопоиске</option>';
+allElemMass[4] = '<option value="4">Жанр</option>';
+allElemMass[5] = '<option value="5">Количество сезонов</option>';
+*/
+
+allElemMass[0] = '--- Нет ---';
+allElemMass[1] = 'Название';
+allElemMass[2] = 'Год выхода';
+allElemMass[3] = 'Рейтинг в кинопоиске';
+allElemMass[4] = 'Жанр';
+allElemMass[5] = 'Количество сезонов';
+
+// Выозвращает нужный элемент option
+function getNumElem(name) {
+  // Получаем элемент с id = "sort-opt"
+  let sortOpt = document.getElementById("sort-opt");
+  // Получаем элемент с классом l1 внутри sortOpt
+  let l1 = sortOpt.getElementsByClassName(name)[0];
+  // Получаем элемент select внутри l1
+  let select = l1.getElementsByTagName("select")[0];
+  return select;
+}
+
+/*
+function reqInputElements(indDesel) {
+
+  console.log('itsElementFree = ' + itsElementFree);
+
+  let a = getNumElem('l1');
+  let b = getNumElem('l2');
+  let c = getNumElem('l3');
+
+  for(let j = 0; j < 3; j++) {
+
+    if(j == 0) a.innerHTML = '';
+    if(j == 1) b.innerHTML = '';
+    if(j == 2) c.innerHTML = '';
+
+    for(let i = 0; i < 6; i++) {
+      let option = document.createElement("option");
+      option.value = i;
+      option.text = allElemMass[i];
+      if(opt_mass[j] == i) {
+        option.selected = true;
+        console.log('opt_mass[' + j + '] = ' + i);
+      }
+
+      if(j == 0) a.appendChild(option);
+      if(j == 1) b.appendChild(option);
+      if(j == 2) c.appendChild(option);
+    }   
+  }
+}
+*/
+
+function reqInputElements(indDesel) {
+
+  console.log('itsElementFree = ' + itsElementFree);
+
+  if(opt_mass[0] == 0 && opt_mass[1] == 0 && opt_mass[2] == 0) {
+    itsElementFree = [0, 0, 0, 0, 0];
+  }
+
+  let a = getNumElem('l1');
+  let b = getNumElem('l2');
+  let c = getNumElem('l3');
+
+  for(let j = 0; j < 3; j++) {
+
+    if(j == 0) a.innerHTML = '';
+    if(j == 1) b.innerHTML = '';
+    if(j == 2) c.innerHTML = '';
+
+    for(let i = 0; i < 6; i++) {
+      if ((itsElementFree[i] != 1) || (opt_mass[j] == i)) {
+        let option = document.createElement("option");
+        option.value = i;
+        option.text = allElemMass[i];
+        if(opt_mass[j] == i) {
+          option.selected = true;
+          console.log('opt_mass[' + j + '] = ' + i);
+        }
+  
+        if(j == 0) a.appendChild(option);
+        if(j == 1) b.appendChild(option);
+        if(j == 2) c.appendChild(option);
+      }
+    }   
+  }
+}
 
 // Для получения значения выбранного переключателя:
 
@@ -148,12 +245,24 @@ const radioButtons = document.querySelector('.block-03 .center-edge-2 select');
 console.log(radioButtons[0].value);
 */
 
+let itsElementFree = [0, 0, 0, 0, 0];
+let bufMass = [0, 0, 0];
+
 const selectElement1 = document.querySelector('.block-03 .l1 select');
 
 selectElement1.addEventListener('change', function() {
   let selectedValue = selectElement1.value;  
-  console.log('opt_mass[0] = ' + selectedValue);
+  //console.log('selectElement1.value = ' + selectElement1.value);
   opt_mass[0] = selectedValue;
+
+  if(selectedValue != 0) {
+    itsElementFree[selectedValue] = 1;
+  } else {
+    itsElementFree[bufMass[0]] = 0;
+  }
+
+  bufMass[0] = selectedValue;
+  reqInputElements(1);
 });
 
 const selectElement2 = document.querySelector('.block-03 .l2 select');
@@ -162,6 +271,15 @@ selectElement2.addEventListener('change', function() {
   let selectedValue = selectElement2.value;  
   console.log('opt_mass[1] = ' + selectedValue);
   opt_mass[1] = selectedValue;
+
+  if(selectedValue != 0) {
+    itsElementFree[selectedValue] = 1;
+  } else {
+    itsElementFree[bufMass[1]] = 0;
+  }
+
+  bufMass[1] = selectedValue;
+  reqInputElements(2);
 });
 
 const selectElement3 = document.querySelector('.block-03 .l3 select');
@@ -170,17 +288,118 @@ selectElement3.addEventListener('change', function() {
   let selectedValue = selectElement3.value;  
   console.log('opt_mass[2] = ' + selectedValue);
   opt_mass[2] = selectedValue;
+
+  if(selectedValue != 0) {
+    itsElementFree[selectedValue] = 1;
+  } else {
+    itsElementFree[bufMass[2]] = 0;
+  }
+
+  bufMass[2] = selectedValue;
+  reqInputElements(3);
 });
 
 //Для получения значений выбранных флажков:
 
-const checkboxes = document.querySelectorAll('.block-03 .right-edge-2 input[type="checkbox"]');
-const checkedValues = [];
+const checkboxes = document.querySelectorAll('.block-03 input[type="checkbox"]');
+let checkedValues = [];
 
-checkboxes.forEach(checkbox => {
-  if (checkbox.checked) {
-    checkedValues.push(checkbox.value);
+check_checkboxes_1();
+
+function check_checkboxes_1() {
+  checkedValues = [];
+  checkboxes.forEach(checkbox => {
+    checkedValues.push(checkbox.checked);
+  });
+  
+  //console.log(checkedValues);
+  opt_bool_mass = checkedValues;
+}
+
+/*
+// Функция для удаления опции по индексу
+function deleteOption(index, name) {
+
+  if(indMinusser>1){index-=(indMinusser-1)}
+  console.log('Delete: index = ' + index + ' name = ' + name);
+
+  // Получаем элемент с id = "sort-opt"
+  let sortOpt = document.getElementById("sort-opt");
+  // Получаем элемент с классом l1 внутри sortOpt
+  let l1 = sortOpt.getElementsByClassName(name)[0];
+  // Получаем элемент select внутри l1
+  let select = l1.getElementsByTagName("select")[0];
+  // Проверяем, что индекс в допустимом диапазоне
+  if (index >= 0 && index <= 5) {
+    // Удаляем опцию с заданным индексом
+    select.remove(index);
+  } else {
+    // Восстанавливаем все опции изначально
+    select.innerHTML = `
+      <option value="0">--- Нет ---</option>
+      <option value="1">Название</option>
+      <option value="2">Год выхода</option>
+      <option value="3">Рейтинг в кинопоиске</option>
+      <option value="4">Жанр</option>
+      <option value="5">Количество сезонов</option>
+    `;
   }
-});
+}
 
-console.log(checkedValues);
+//deleteOption(1, 'l1');
+
+let indMinusser = 0;
+
+/*
+// Функция для добавления опции (по индексу), в элемент, по названию класса
+function addOption(index, elementClassName) {
+
+  console.log('Inserte: index = ' + index + ' name = ' + elementClassName);
+
+  // Получаем элемент с id = "sort-opt"
+  let sortOpt = document.getElementById("sort-opt");
+  let element = sortOpt.querySelector("." + elementClassName); // получаем первый элемент по классу
+  // Создаем массив с возможными значениями опций
+  let options = ["--- Нет ---", "Название", "Год выхода", 
+  "Рейтинг в кинопоиске", "Жанр", "Количество сезонов"];
+  // Задаём опцию
+  let select = element.querySelector("select"); // получаем первый select внутри элемента
+  
+  // Создаем новый элемент option с заданным индексом и значением
+  let option = document.createElement("option");
+  option.value = index;
+  option.text = options[index];
+  // Получаем элемент option, который находится на месте index
+  let nextOption = select.options[index];
+  // Добавляем новый элемент option перед ним
+  select.insertBefore(option, nextOption);
+}
+
+//addOption(1, 'l1');
+*/
+/*
+// Функция для добавления опции (по названию), в элемент, по названию класса
+function addOptionByName(name, elementClassName) {
+  console.log('Inserte: name = ' + name + ' class = ' + elementClassName);
+  
+  // Получаем элемент с id = "sort-opt"
+  let sortOpt = document.getElementById("sort-opt");
+  let element = sortOpt.querySelector("." + elementClassName); 
+  // получаем первый элемент по классу
+  
+  // Создаем массив с возможными значениями опций
+  let options = ["--- Нет ---", "Название", "Год выхода", 
+  "Рейтинг в кинопоиске", "Жанр", "Количество сезонов"];
+  
+  // Задаём опцию
+  let select = element.querySelector("select"); // получаем первый select внутри элемента
+  
+  // Создаем новый элемент option с заданным значением и текстом
+  let option = document.createElement("option");
+  option.value = name;
+  option.text = name;
+  
+  // Добавляем новый элемент option в конец списка опций
+  select.appendChild(option);
+}
+*/

@@ -347,6 +347,7 @@ table td {
 }
 tr.title td {
   font-weight: bold;
+  border: solid #000 0px;
 }
 .cl-center {
   text-align: center;
