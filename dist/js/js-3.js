@@ -78,6 +78,7 @@ function createTable(data) {
 // Получаем ссылку на таблицу
 let table = document.getElementById("my-table");
 let butt_sort = document.getElementById("butt-sort");
+let butt_filter = document.getElementById("butt-filter");
 
 if(table == undefined) { 
   alert('Ошибка! На странице не обнаружена требуемая таблица!');
@@ -93,6 +94,7 @@ console.log(headers);
 
 // Проходим по каждой строке таблицы и сохраняем ее содержимое в массив словарей
 let data = [];
+
 for (let i = 1; i < table.rows.length; i++) {
   const tableRow = table.rows[i];
   const rowData = {};
@@ -105,7 +107,8 @@ for (let i = 1; i < table.rows.length; i++) {
   data.push(rowData);
 }
 
-//console.log(data);
+console.log(data);
+let data_1 = data;
 
 let opt_mass = [];
 
@@ -122,6 +125,7 @@ opt_bool_mass[2] = false;
 // Пересобираем таблицу
 function ReqSort() {
   sortDataByName(data, headers, opt_mass, opt_bool_mass);
+  data_1 = data;
 
   //console.log(data);
   
@@ -139,6 +143,106 @@ butt_sort.addEventListener('click', () => {
   //console.log('Кнопка нажата!');
   check_checkboxes_1();
   ReqSort();
+});
+
+let strMass = ["", "", 0, 0, 0, 0];
+
+function setSortTable(date, strMass) {
+  //console.log('date = ' + date);
+
+  let outDate = [];
+
+  for(let j = 2; j < strMass.length; j++) {
+    if(strMass[j] == "") strMass[j] = 0;
+    else strMass[j] = parseInt(strMass[j]);
+  }
+
+  console.log('strMass = ' + strMass);
+
+  // Прохожу по всем записям в массиве date
+  // Если запись соответствует всем условиям, то я добавляю её в выходной массив
+  for(let i = 0; i < date.length; i++) {
+    let bool = true;
+
+    if(strMass[0] != "") {
+      //console.log('strMass[0] = ' + strMass[0] );
+      if (date[i].Название.indexOf(strMass[0]) === -1) {
+        bool = false;
+      }
+    }
+    if(strMass[1] != "") {
+      //console.log('strMass[1] = ' + strMass[1] );
+      if (date[i].Жанр.indexOf(strMass[1]) === -1) {
+        bool = false;
+      }
+    }
+    if(strMass[2] != 0) {
+      if(date[i]["Количество частей"] != strMass[2]) {
+        bool = false;
+      }
+    }
+    if(strMass[3] != 0) {
+      if(date[i]['Год выхода'] < strMass[3]) {
+        bool = false;
+      }
+    }
+    if(strMass[4] != 0) {
+      if(date[i]['Год выхода'] > strMass[4]) {
+        bool = false;
+      }
+    }
+    if(strMass[5] != 0) {
+      if(date[i]['Рейтинг на кинопоиске'] < strMass[5]) {
+        bool = false;
+      }
+    }
+    if(strMass[6] != 0) {
+      if(date[i]['Рейтинг на кинопоиске'] > strMass[6]) {
+        bool = false;
+      }
+    }
+
+
+    if(bool == true) {
+      outDate.push(date[i]);
+    }
+  }
+
+  return outDate;
+}
+
+/*
+  Прикрутить источник фильтраци к странице
+
+  Добавить кнопку сбросить все фильтры и сортировки
+  Если при фильтре записей не найдено, выводить надпись об этом, а не пустую таблицу
+*/
+
+
+// Пересобираем таблицу
+function ReqFilter() {
+  // sortDataByName(data, headers, opt_mass, opt_bool_mass);
+
+  strMass = ["", "", "", "", "", "", "1"]; // Нужно получить из страницы
+
+  let inDate = setSortTable(data_1, strMass);  
+
+  //console.log(data);
+  
+  table.remove();
+  
+  var newTable = createTable(inDate);
+  
+  var container = document.getElementById("table-container");
+  container.insertBefore(newTable, container.firstChild);
+
+  table = document.getElementById("my-table");
+}
+
+butt_filter.addEventListener('click', () => {
+  console.log('Кнопка фильтра нажата!');
+  check_checkboxes_1();
+  ReqFilter();
 });
 
 // Массив, в котором хранятся все строки значений списка
