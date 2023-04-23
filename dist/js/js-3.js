@@ -213,11 +213,12 @@ function setSortTable(date, strMass) {
 }
 
 /*
-  Прикрутить источник фильтраци к странице
-
   Добавить кнопку сбросить все фильтры и сортировки
   Если при фильтре записей не найдено, выводить надпись об этом, а не пустую таблицу
 */
+
+bad_news = document.getElementById('bad-news');
+bad_news.style.display = "none";
 
 // Пересобираем таблицу
 function ReqFilter() {
@@ -239,12 +240,20 @@ function ReqFilter() {
   
   table.remove();
   
-  var newTable = createTable(inDate);
-  
-  var container = document.getElementById("table-container");
-  container.insertBefore(newTable, container.firstChild);
+  var newTable;
 
-  table = document.getElementById("my-table");
+  if(inDate.length > 0) { 
+    bad_news.style.display = "none"; // скрываем элемент
+
+    newTable = createTable(inDate);
+    var container = document.getElementById("table-container");
+    container.insertBefore(newTable, container.firstChild);
+  
+    table = document.getElementById("my-table");
+  }
+  else { 
+    bad_news.style.display = "block";
+  }
 }
 
 butt_filter.addEventListener('click', () => {
