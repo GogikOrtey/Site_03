@@ -143,6 +143,7 @@ butt_sort.addEventListener('click', () => {
   //console.log('Кнопка нажата!');
   check_checkboxes_1();
   ReqSort();
+  ReqFilter();
 });
 
 let strMass = ["", "", 0, 0, 0, 0];
@@ -157,7 +158,7 @@ function setSortTable(date, strMass) {
     else strMass[j] = parseInt(strMass[j]);
   }
 
-  console.log('strMass = ' + strMass);
+  //console.log('strMass = ' + strMass);
 
   // Прохожу по всем записям в массиве date
   // Если запись соответствует всем условиям, то я добавляю её в выходной массив
@@ -218,12 +219,19 @@ function setSortTable(date, strMass) {
   Если при фильтре записей не найдено, выводить надпись об этом, а не пустую таблицу
 */
 
-
 // Пересобираем таблицу
 function ReqFilter() {
   // sortDataByName(data, headers, opt_mass, opt_bool_mass);
 
-  strMass = ["", "", "", "", "", "", "1"]; // Нужно получить из страницы
+  //strMass = ["", "", "", "", "", "", ""]; // Нужно получить из страницы
+
+  const inputs = document.querySelectorAll('.block-02 .right-edge-1 input[type="text"]');
+  strMass = [];
+  for (let i = 0; i < inputs.length; i++) {
+    strMass.push(inputs[i].value);
+  }
+
+  console.log('strMass = ' + strMass);
 
   let inDate = setSortTable(data_1, strMass);  
 
@@ -242,6 +250,7 @@ function ReqFilter() {
 butt_filter.addEventListener('click', () => {
   console.log('Кнопка фильтра нажата!');
   check_checkboxes_1();
+  ReqSort();
   ReqFilter();
 });
 
