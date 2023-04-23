@@ -1,3 +1,4 @@
+// Эта функция сортирует входной массив, по полученнным параметрам
 function sortDataByName(data, headers, opt_mass, opt_bool_mass) {
   data.sort((a, b) => {
     for(let i = 0; i < opt_mass.length; i++) {
@@ -68,15 +69,12 @@ function createTable(data) {
 }
 
 // --------------------
-
-/*
-  Убирать из функций те, что мы уже использовали
-
-  И останется сделать фильтрацию записей
-*/
+// Вот тут начало программы
 
 // Получаем ссылку на таблицу
 let table = document.getElementById("my-table");
+
+// И на кнопочки, по нажатиям которых мы будем обновлять таблицу
 let butt_sort = document.getElementById("butt-sort");
 let butt_filter = document.getElementById("butt-filter");
 
@@ -110,42 +108,48 @@ for (let i = 1; i < table.rows.length; i++) {
 console.log(data);
 let data_1 = data;
 
+// Массив того, какие опции выбраны в каждом из 3х уровней сортировки 
+// (значения от 0 до 5)
 let opt_mass = [];
 
 opt_mass[0] = 0;
 opt_mass[1] = 0;
 opt_mass[2] = 0;
 
+// Массив галочек, которые называются "по убыванию?"
 let opt_bool_mass = [];
 
 opt_bool_mass[0] = false;
 opt_bool_mass[1] = false;
 opt_bool_mass[2] = false;
 
-// Пересобираем таблицу
+// Пересобираем таблицу (сортировка)
 function ReqSort() {
   sortDataByName(data, headers, opt_mass, opt_bool_mass);
   data_1 = data;
 
   //console.log(data);
   
-  table.remove();
+  table.remove(); // Дропаю таблицу со страницы
   
-  var newTable = createTable(data);
+  var newTable = createTable(data); // И собираю новую, с нужными данными
   
-  var container = document.getElementById("table-container");
-  container.insertBefore(newTable, container.firstChild);
+  var container = document.getElementById("table-container"); // Нахожу контейнер для таблицы
+  container.insertBefore(newTable, container.firstChild); // И вставляю новую таблицу в этот контейнер
 
-  table = document.getElementById("my-table");
+  table = document.getElementById("my-table"); // Это также нужно
 }
 
 butt_sort.addEventListener('click', () => {
-  //console.log('Кнопка нажата!');
+  //console.log('Кнопка сортировки нажата!');
   check_checkboxes_1();
+
+  // Тут мы одновременно сортируем и фильтруем данные таблицы
   ReqSort();
   ReqFilter();
 });
 
+// Это массив значений всех 6 полей фильтра
 let strMass = ["", "", 0, 0, 0, 0];
 
 function setSortTable(date, strMass) {
@@ -203,7 +207,6 @@ function setSortTable(date, strMass) {
       }
     }
 
-
     if(bool == true) {
       outDate.push(date[i]);
     }
@@ -212,20 +215,14 @@ function setSortTable(date, strMass) {
   return outDate;
 }
 
-/*
-  Добавить кнопку сбросить все фильтры и сортировки
-  Если при фильтре записей не найдено, выводить надпись об этом, а не пустую таблицу
-*/
+// Это надпись "Записей по данному запросу не найдено"
+bad_news = document.getElementById('bad-news'); 
+bad_news.style.display = "none"; // Сначала скрываю её
 
-bad_news = document.getElementById('bad-news');
-bad_news.style.display = "none";
-
-// Пересобираем таблицу
+// Пересобираем таблицу (фильтрация)
 function ReqFilter() {
-  // sortDataByName(data, headers, opt_mass, opt_bool_mass);
 
-  //strMass = ["", "", "", "", "", "", ""]; // Нужно получить из страницы
-
+  // Получаю значения всех 6 полей со страницы, и записываю их в массив strMass
   const inputs = document.querySelectorAll('.block-02 .right-edge-1 input[type="text"]');
   strMass = [];
   for (let i = 0; i < inputs.length; i++) {
@@ -234,16 +231,16 @@ function ReqFilter() {
 
   console.log('strMass = ' + strMass);
 
-  let inDate = setSortTable(data_1, strMass);  
+  let inDate = setSortTable(data_1, strMass); // Фильтрую
 
   //console.log(data);
   
-  table.remove();
+  table.remove(); // Тем-же методом пересобираю таблицу
   
   var newTable;
 
   if(inDate.length > 0) { 
-    bad_news.style.display = "none"; // скрываем элемент
+    bad_news.style.display = "none"; // Скрываем элемент bad_news
 
     newTable = createTable(inDate);
     var container = document.getElementById("table-container");
@@ -252,7 +249,8 @@ function ReqFilter() {
     table = document.getElementById("my-table");
   }
   else { 
-    bad_news.style.display = "block";
+    // Если после фильтрации записей нет - показываю грустное сообщение
+    bad_news.style.display = "block"; 
   }
 }
 
@@ -265,14 +263,6 @@ butt_filter.addEventListener('click', () => {
 
 // Массив, в котором хранятся все строки значений списка
 let allElemMass = [];
-/*
-allElemMass[0] = '<option value="0">--- Нет ---</option>';
-allElemMass[1] = '<option value="1">Название</option>';
-allElemMass[2] = '<option value="2">Год выхода</option>';
-allElemMass[3] = '<option value="3">Рейтинг в кинопоиске</option>';
-allElemMass[4] = '<option value="4">Жанр</option>';
-allElemMass[5] = '<option value="5">Количество сезонов</option>';
-*/
 
 allElemMass[0] = '--- Нет ---';
 allElemMass[1] = 'Название';
@@ -281,7 +271,7 @@ allElemMass[3] = 'Рейтинг в кинопоиске';
 allElemMass[4] = 'Жанр';
 allElemMass[5] = 'Количество сезонов';
 
-// Выозвращает нужный элемент option
+// Возвращает нужный элемент option
 function getNumElem(name) {
   // Получаем элемент с id = "sort-opt"
   let sortOpt = document.getElementById("sort-opt");
@@ -292,62 +282,48 @@ function getNumElem(name) {
   return select;
 }
 
-/*
+// Перелопачивает 3 input-элемента выбора сортировки
+// Так, что бы если в первом опуия выбрана, то
+// В других - её уже не было
 function reqInputElements(indDesel) {
-
-  console.log('itsElementFree = ' + itsElementFree);
-
-  let a = getNumElem('l1');
-  let b = getNumElem('l2');
-  let c = getNumElem('l3');
-
-  for(let j = 0; j < 3; j++) {
-
-    if(j == 0) a.innerHTML = '';
-    if(j == 1) b.innerHTML = '';
-    if(j == 2) c.innerHTML = '';
-
-    for(let i = 0; i < 6; i++) {
-      let option = document.createElement("option");
-      option.value = i;
-      option.text = allElemMass[i];
-      if(opt_mass[j] == i) {
-        option.selected = true;
-        console.log('opt_mass[' + j + '] = ' + i);
-      }
-
-      if(j == 0) a.appendChild(option);
-      if(j == 1) b.appendChild(option);
-      if(j == 2) c.appendChild(option);
-    }   
-  }
-}
-*/
-
-function reqInputElements(indDesel) {
+  // Жесть конечно. Её было сложно написать
 
   console.log('itsElementFree = ' + itsElementFree);
 
   if(opt_mass[0] == 0 && opt_mass[1] == 0 && opt_mass[2] == 0) {
     itsElementFree = [0, 0, 0, 0, 0];
+    // Иногда всё ломается, но эта строчка обратно всё чинит
+
+    // P.S.: [Скорее всего] Всё ломается из-за того, что пользователь слишком быстро
+    // переключает элементы в выпадающих списках, и программа не успевает
+    // отлавливать и обрабатывать изменения
   }
 
+  // Получаю элементы
   let a = getNumElem('l1');
   let b = getNumElem('l2');
   let c = getNumElem('l3');
 
+  // Прохожу по каждому из 3х
   for(let j = 0; j < 3; j++) {
-
+    // Удаляю их содержимое
     if(j == 0) a.innerHTML = '';
     if(j == 1) b.innerHTML = '';
     if(j == 2) c.innerHTML = '';
 
     for(let i = 0; i < 6; i++) {
       if ((itsElementFree[i] != 1) || (opt_mass[j] == i)) {
+        // Если i-я опция ни в одном не выбрана
+        // Или, если эта опция выбрана конкретно в этом элементе,
+        // я добавляю эту опцию в этот элемент
+
         let option = document.createElement("option");
         option.value = i;
         option.text = allElemMass[i];
+
         if(opt_mass[j] == i) {
+          // Если эта опция выбрана конкретно в этом элементе,
+          // то ставлю её selected.
           option.selected = true;
           console.log('opt_mass[' + j + '] = ' + i);
         }
@@ -368,7 +344,17 @@ console.log(radioButtons[0].value);
 */
 
 let itsElementFree = [0, 0, 0, 0, 0];
+// Это массив, который говорит нам, выбрана ли где-то i-я опция
+// Например, если только в 1м уровне сортировки выбрать "Название",
+// то данный массив будет выглядеть так: itsElementFree = [0, 1, 0, 0, 0]
+
 let bufMass = [0, 0, 0];
+// Массив буферных значений
+// Он нам понадобится, когда пользователь удалит свой выбор из какого-то уровня сортировки,
+// и нам нужно будет поставить нужный элемент массива itsElementFree в значение 0
+
+// Дальше, я для каждого списка уровня сортировки добавляю функцию, 
+// вызывающуюся при изменении его значения
 
 const selectElement1 = document.querySelector('.block-03 .l1 select');
 
@@ -384,7 +370,7 @@ selectElement1.addEventListener('change', function() {
   }
 
   bufMass[0] = selectedValue;
-  reqInputElements(1);
+  reqInputElements(1); // Пересобираю все 3 элемента, в зависимости от выбора пользователя
 });
 
 const selectElement2 = document.querySelector('.block-03 .l2 select');
@@ -437,91 +423,3 @@ function check_checkboxes_1() {
   //console.log(checkedValues);
   opt_bool_mass = checkedValues;
 }
-
-/*
-// Функция для удаления опции по индексу
-function deleteOption(index, name) {
-
-  if(indMinusser>1){index-=(indMinusser-1)}
-  console.log('Delete: index = ' + index + ' name = ' + name);
-
-  // Получаем элемент с id = "sort-opt"
-  let sortOpt = document.getElementById("sort-opt");
-  // Получаем элемент с классом l1 внутри sortOpt
-  let l1 = sortOpt.getElementsByClassName(name)[0];
-  // Получаем элемент select внутри l1
-  let select = l1.getElementsByTagName("select")[0];
-  // Проверяем, что индекс в допустимом диапазоне
-  if (index >= 0 && index <= 5) {
-    // Удаляем опцию с заданным индексом
-    select.remove(index);
-  } else {
-    // Восстанавливаем все опции изначально
-    select.innerHTML = `
-      <option value="0">--- Нет ---</option>
-      <option value="1">Название</option>
-      <option value="2">Год выхода</option>
-      <option value="3">Рейтинг в кинопоиске</option>
-      <option value="4">Жанр</option>
-      <option value="5">Количество сезонов</option>
-    `;
-  }
-}
-
-//deleteOption(1, 'l1');
-
-let indMinusser = 0;
-
-/*
-// Функция для добавления опции (по индексу), в элемент, по названию класса
-function addOption(index, elementClassName) {
-
-  console.log('Inserte: index = ' + index + ' name = ' + elementClassName);
-
-  // Получаем элемент с id = "sort-opt"
-  let sortOpt = document.getElementById("sort-opt");
-  let element = sortOpt.querySelector("." + elementClassName); // получаем первый элемент по классу
-  // Создаем массив с возможными значениями опций
-  let options = ["--- Нет ---", "Название", "Год выхода", 
-  "Рейтинг в кинопоиске", "Жанр", "Количество сезонов"];
-  // Задаём опцию
-  let select = element.querySelector("select"); // получаем первый select внутри элемента
-  
-  // Создаем новый элемент option с заданным индексом и значением
-  let option = document.createElement("option");
-  option.value = index;
-  option.text = options[index];
-  // Получаем элемент option, который находится на месте index
-  let nextOption = select.options[index];
-  // Добавляем новый элемент option перед ним
-  select.insertBefore(option, nextOption);
-}
-
-//addOption(1, 'l1');
-*/
-/*
-// Функция для добавления опции (по названию), в элемент, по названию класса
-function addOptionByName(name, elementClassName) {
-  console.log('Inserte: name = ' + name + ' class = ' + elementClassName);
-  
-  // Получаем элемент с id = "sort-opt"
-  let sortOpt = document.getElementById("sort-opt");
-  let element = sortOpt.querySelector("." + elementClassName); 
-  // получаем первый элемент по классу
-  
-  // Создаем массив с возможными значениями опций
-  let options = ["--- Нет ---", "Название", "Год выхода", 
-  "Рейтинг в кинопоиске", "Жанр", "Количество сезонов"];
-  
-  // Задаём опцию
-  let select = element.querySelector("select"); // получаем первый select внутри элемента
-  
-  // Создаем новый элемент option с заданным значением и текстом
-  let option = document.createElement("option");
-  option.value = name;
-  option.text = name;
-  
-  // Добавляем новый элемент option в конец списка опций
-  select.appendChild(option);
-}
-*/
